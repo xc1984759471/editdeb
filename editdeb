@@ -1,0 +1,63 @@
+#!/bin/bash
+#Deb软件包编辑器（图形界面交互）
+#作者：xc1984759471
+export workdir=$(pwd)
+if [ -z $1 ];then
+#zenity --info --width 300 --text="用法:$0 \"Deb包路径\""
+zenity --question --text="欢迎使用Deb软件包编辑器.\n请选择要进行的操作:\n是:打开文件\n否:新建软件包"
+export OPERATE1=$?
+if [[ "$OPERATE1" = "0" ]];then
+export debfile=$(zenity --file-selection --title="请选择Deb软件包文件" --file-filter=*.deb)
+#return 1
+elif [[ "$OPERATE1" = 1 ]];then
+export debfile=/usr/share/editdeb/deb-package-sample_1.0.0-1_all.deb
+else
+exit 1
+fi
+else
+export debfile=$1
+fi
+function zenity-sel(){
+export text=$(zenity --height 450 --width 320 --list --ok-label="确定" --cancel-label="取消" --title="DEB包属性编辑器" \
+    --column="选择要编辑的文件：" $(ls $workdir/debdir/DEBIAN) "都不是，请为我打开文件管理器");
+if [ "$text" = "" ];then echo 1;else echo $text;fi
+}
+function zenity-dir(){
+export text1=$(zenity --file-selection --title="选择要保存的文件夹,单击取消默认打包在当前目录" --directory)
+if [ "$text1" = "" ];then echo 1;else echo $text1;fi
+}
+function build_action(){
+export text11=$(zenity-dir)
+if [ "$text11" = "1" ];then
+zenity --question --text="未选择路径，将默认打包于当前目录,是否继续？"
+export OPERATE2=$?
+if [[ "$OPERATE2" = "0" ]];then
+dpkg-deb -b $workdir/debdir ./
+else
+echo "操作已取消，更改将不会保存"
+fi
+else
+dpkg-deb -b $workdir/debdir/ $text11
+fi
+rm -rf $workdir/debdir
+}
+main(){
+mkdir $workdir/debdir
+mkdir $workdir/debdir/DEBIAN 
+dpkg -X $debfile $workdir/debdir;dpkg -e $debfile $workdir/debdir/DEBIAN||exit 1
+export text01=$(zenity-sel)
+if [ "$text01" = "1" ];then
+rm -rf $workdir/debdir
+return 1;
+elif [ "$text01" = "都不是，请为我打开文件管理器" ];then
+exo-open --launch FileManager $workdir/debdir &
+zenity --info --text="请在编辑完成后，按确定键或关闭此提示继续。"
+build_action
+else 
+editor $workdir/debdir/DEBIAN/$text01
+build_action
+fi
+
+}
+main $1
+
