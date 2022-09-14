@@ -24,4 +24,7 @@ editdeb [Deb软件包路径]
 
 **dpkg:Debian软件包管理程序.https://wiki.debian.org/Teams/Dpkg**
 
-# 版权声明
+# 版权与法律声明
+本项目遵守GPLv2协议,可<a href="LICENSE" target="_blank">点击此处</a>查看
+
+您所编辑的软件包可能会有闭源的商业软件,在编辑前请务必遵守相关的版权许可声明与法律规定.因使用本软件造成法律问题的,后果自行承担,本项目不承担任何责任.
