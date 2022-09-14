@@ -1,0 +1,21 @@
+[Desktop Entry]
+Name=Deb Package Editor
+
+Name[zh_CN]=Deb 软件包编辑器
+
+GenericName=Package Editor
+
+GenericName[zh_CN]=软件包编辑器
+Comment=Edit your deb package by yourself.
+Comment[zh_CN]=自定义你的软件包.
+
+Exec=editdeb %f
+Icon=gnome-mime-application-x-deb
+Terminal=true
+Type=Application
+Categories=System;
+MimeType=application/vnd.debian.binary-package;
+#NotShowIn=KDE;
+X-Ubuntu-Gettext-Domain=gdebi
+StartupNotify=true
+Keywords=package;apt;dpkg;install

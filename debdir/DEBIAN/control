@@ -1,0 +1,13 @@
+Package: editdeb
+Version: 1.0.3-1
+Architecture: all
+Maintainer: xc1984759471 <1984759471@qq.com>
+Original-Maintainer: xc1984759471 <1984759471@qq.com>
+Installed-Size: 1.3KB
+Depends: zenity, bash, dpkg, exo-utils
+Section: editdeb
+Priority: optional
+Homepage: http://xc1984759471.github.io/index
+Description: DEB package editor.
+  Edit your deb package by yourself.
+
