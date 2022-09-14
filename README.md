@@ -20,7 +20,7 @@ editdeb [Deb软件包路径]
 # 使用的项目
 **zenity:一款开源的shell对话框引擎.http://live.gnome.org/Zenity**
 
-**exo-utils:xfce4默认程序设置的基础组件.https://docs.xfce.org/xfce/exo/start**
+**exo-utils:xfce4管理默认应用设置的基础组件.https://docs.xfce.org/xfce/exo/start**
 
 **dpkg:Debian软件包管理程序.https://wiki.debian.org/Teams/Dpkg**
 

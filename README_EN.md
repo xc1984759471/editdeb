@@ -19,7 +19,7 @@ editdeb [Deb package path]
 # Items to use
 **zenity: An open source shell dialog engine. http://live.gnome.org/Zenity**
 
-**exo-utils: Basic components of xfce4 default program settings. https://docs.xfce.org/xfce/exo/start**
+**exo-utils: Basic components of xfce4 to manage default application settings. https://docs.xfce.org/xfce/exo/start**
 
 **dpkg: Debian Package Manager. https://wiki.debian.org/Teams/Dpkg**
 
