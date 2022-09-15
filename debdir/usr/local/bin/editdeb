@@ -1,6 +1,18 @@
 #!/bin/bash
 #Deb软件包编辑器（图形界面交互）
 #作者：xc1984759471
+export pid_num=$$
+echo $pid_num >> $(pwd)/editdeb_running.tmp
+#sed -i ':a;N;s/\\n/ /g;ta' $(pwd)/editdeb_running.tmp
+for i in $(cat $(pwd)/editdeb_running.tmp);do
+	ps -p $i
+	export EXIT0=$?
+	if [[ "$EXIT0" != "0" ]];then
+		rm -rf $(pwd)/debdir_$i
+		eval sed -i 's#$i##g' $(pwd)/editdeb_running.tmp
+		sed -i '/^$/d' $(pwd)/editdeb_running.tmp
+	fi
+done
 export workdir=$(pwd)
 if [ -z $1 ];then
 #zenity --info --width 300 --text="用法:$0 \"Deb包路径\""
@@ -19,7 +31,7 @@ export debfile=$1
 fi
 function zenity-sel(){
 export text=$(zenity --height 450 --width 320 --list --ok-label="确定" --cancel-label="取消" --title="DEB包属性编辑器" \
-    --column="选择要编辑的文件：" $(ls $workdir/debdir/DEBIAN) "都不是，请为我打开文件管理器");
+    --column="选择要编辑的文件：" $(ls $workdir/debdir_$pid_num/DEBIAN) "都不是，请为我打开文件管理器");
 if [ "$text" = "" ];then echo 1;else echo $text;fi
 }
 function zenity-dir(){
@@ -32,29 +44,29 @@ if [ "$text11" = "1" ];then
 zenity --question --text="未选择路径，将默认打包于当前目录,是否继续？"
 export OPERATE2=$?
 if [[ "$OPERATE2" = "0" ]];then
-dpkg-deb -b $workdir/debdir ./
+dpkg-deb -b $workdir/debdir_$pid_num ./
 else
 echo "操作已取消，更改将不会保存"
 fi
 else
-dpkg-deb -b $workdir/debdir/ $text11
+dpkg-deb -b $workdir/debdir_$pid_num/ $text11
 fi
-rm -rf $workdir/debdir
+rm -rf $workdir/debdir_$pid_num
 }
 main(){
-mkdir $workdir/debdir
-mkdir $workdir/debdir/DEBIAN 
-dpkg -X $debfile $workdir/debdir;dpkg -e $debfile $workdir/debdir/DEBIAN||exit 1
+mkdir $workdir/debdir_$pid_num
+mkdir $workdir/debdir_$pid_num/DEBIAN 
+dpkg -X $debfile $workdir/debdir_$pid_num;dpkg -e $debfile $workdir/debdir_$pid_num/DEBIAN||exit 1
 export text01=$(zenity-sel)
 if [ "$text01" = "1" ];then
-rm -rf $workdir/debdir
+rm -rf $workdir/debdir_$pid_num
 return 1;
 elif [ "$text01" = "都不是，请为我打开文件管理器" ];then
-exo-open --launch FileManager $workdir/debdir &
-zenity --info --text="请在编辑完成后，按确定键或关闭此提示继续。"
+exo-open --launch FileManager $workdir/debdir_$pid_num &
+zenity --info --text="已解压到此路径：$workdir/debdir_$pid_num,\如果未自动打开，请手动打开目录。\n请在编辑完成后，按确定键或关闭此提示继续。"
 build_action
 else 
-editor $workdir/debdir/DEBIAN/$text01
+editor $workdir/debdir_$pid_num/DEBIAN/$text01
 build_action
 fi
 
